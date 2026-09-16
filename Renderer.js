@@ -28,7 +28,7 @@ class Renderer {
     pop();
   }
 
-  // Draws the current error message (if any) below the input box.
+  // Draws the current error message (if any) above the input box.
   drawErrorMessage(message) {
     if (!message || message === '') return;
     push();
@@ -58,7 +58,7 @@ class Renderer {
     if (!atCollege) {
       text(`${result.word} - score: ${result.score.toFixed(3)}, size: ${result.fontSize}`, width / 2, 350);
     } else {
-      text(`${result.word} — score: ${'result.score.toFixed(3)'}, size: ${'result.fontSize'}`, width / 2, 350);
+      text(`${result.word} — score: securly messed this bit up, size: this bit too`, width / 2, 350);
     }
     
     pop();

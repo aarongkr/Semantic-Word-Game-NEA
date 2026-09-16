@@ -19,9 +19,7 @@ class Scorer {
     return dotProduct / (Math.sqrt(magnitudeA) * Math.sqrt(magnitudeB));
   }
 
-  // Maps a cosine similarity score (-1 to 1) to a font size, using a cubic
-  // curve so that only genuinely close guesses appear noticeably larger,
-  // as justified in DE3.
+  // Maps a cosine similarity score (-1 to 1) to a font size, using a cubic curve so that only actually close guesses appear noticeably larger, as justified in DE3.
   mapFontSize(score) {
     const MIN_SIZE = 12;
     const MAX_SIZE = 72;

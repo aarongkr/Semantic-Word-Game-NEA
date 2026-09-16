@@ -1,0 +1,20 @@
+{
+  "animals": [
+    "dog",
+    "cat",
+    "cow",
+    "pig"
+  ],
+  "places": [
+    "home",
+    "school",
+    "office",
+    "park"
+  ],
+  "emotions": [
+    "happy",
+    "sad",
+    "bored",
+    "angry"
+  ]
+}
