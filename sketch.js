@@ -1,12 +1,12 @@
 // sketch.js
 let debugging = false;
-let atCollege = true;
+let atCollege = false;
 
 let game;
 let globalTime;
 
 async function setup() {
-  createCanvas(800, 600);
+  createCanvas(windowWidth, windowHeight);
   game = new Game();
   await game.setup();
 }
@@ -28,4 +28,8 @@ function keyPressed() {
   } else {
     game.inputHandler.handleKeyPress(key);
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }

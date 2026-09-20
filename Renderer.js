@@ -10,7 +10,7 @@ class Renderer {
   // Draws the input box, showing placeholder text if nothing has been typed yet.
   drawInputBox(currentText) {
     let x = width / 2;
-    let y = 500;
+    let y = height * 0.9;
 
     push();
     rectMode(CENTER);
@@ -43,7 +43,7 @@ class Renderer {
       textAlign(CENTER);
       let timeDiff = globalTime - this.lastErrorTime;
       fill(255, 0, 0, 255-timeDiff/2);
-      text(this.lastErrorMessage, width / 2, 485-(timeDiff/16));
+      text(this.lastErrorMessage, width / 2, height*0.875-(timeDiff/16));
     pop();
   }
 
@@ -63,11 +63,7 @@ class Renderer {
     textAlign(CENTER, CENTER);
     fill(0);
     textSize(16);
-    if (!atCollege) {
-      text(`${result.word} - score: ${result.score.toFixed(3)}, size: ${result.fontSize}`, width / 2, 350);
-    } else {
-      text(`${result.word} — score: securly messed this bit up, size: this bit too`, width / 2, 350);
-    }
+    text(`${result.word} - score: ${result.score.toFixed(3)}, size: ${result.fontSize}`, width / 2, height / 2);
     
     pop();
   }

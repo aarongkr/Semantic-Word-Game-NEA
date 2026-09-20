@@ -65,14 +65,14 @@ class Game {
     }
 
     this.isProcessingGuess = true;
-    
+    let score = random(0, 1);
     if (!atCollege) {
       let guessVector = await this.embedder.embed(guess);
       let score = this.scorer.cosineSim(guessVector, this.secretVector);
-      let fontSize = this.scorer.mapFontSize(score);
     }
+    let fontSize = this.scorer.mapFontSize(score);
 
-    this.lastResult = { word: guess, score: 'score', fontSize: 'fontSize' };
+    this.lastResult = { word: guess, score: score, fontSize: fontSize };
     this.previousGuesses.add(guess);
     this.inputHandler.clearInput();
     this.isProcessingGuess = false;
