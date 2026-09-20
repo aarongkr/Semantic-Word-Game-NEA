@@ -36,10 +36,10 @@ class InputHandler {
 
   updateBackspace() {
     if (keyIsDown(BACKSPACE)) {
-      const start = millis();
+      const start = globalTime;
       if (start - this.lastBackspace >= 40) {
         this.handleBackspace();
-        this.lastBackspace = millis();
+        this.lastBackspace = globalTime;
       }
     }
   }

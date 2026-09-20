@@ -1,8 +1,9 @@
 // sketch.js
-let debugging = true;
+let debugging = false;
 let atCollege = true;
 
 let game;
+let globalTime;
 
 async function setup() {
   createCanvas(800, 600);
@@ -11,6 +12,7 @@ async function setup() {
 }
 
 function draw() {
+  globalTime = millis();
   game.draw();
   if (debugging) {
     text(`${mouseX}, ${mouseY}`, mouseX, mouseY)

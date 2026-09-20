@@ -2,7 +2,10 @@
 // Handles all p5.js drawing for the game. No other class should call
 // p5 drawing functions directly, keeping presentation separate from logic.
 class Renderer {
-  constructor() {}
+  constructor() {
+    this.lastErrorMessage = "";
+    this.lastErrorTime = -Infinity;
+  }
 
   // Draws the input box, showing placeholder text if nothing has been typed yet.
   drawInputBox(currentText) {
@@ -12,17 +15,18 @@ class Renderer {
     push();
     rectMode(CENTER);
     textAlign(CENTER, CENTER);
-    stroke(0);
+    stroke(255-((globalTime-this.lastErrorTime)/2), 0, 0);
     strokeWeight(1);
-    fill(0, 0, 0);
+    fill(255-((globalTime-this.lastErrorTime)/2), 0, 0);
     textSize(20);
 
     if (!currentText || currentText === '') {
       text('[  ]', x, y);
       strokeWeight(2);
-      stroke(0, 0, 0, (floor(millis() / 500) % 2)*255);
+      stroke(255-((globalTime-this.lastErrorTime)/2), 0, 0, (floor(globalTime / 500) % 2)*255);
       line(x-1, y-7, x-1, y+8)
     } else {
+      stroke(255-((globalTime-this.lastErrorTime)/2), 0, 0);
       text(`[ ${currentText} ]`, x, y);
     }
     pop();
@@ -30,12 +34,16 @@ class Renderer {
 
   // Draws the current error message (if any) above the input box.
   drawErrorMessage(message) {
-    if (!message || message === '') return;
-    push();
-    textAlign(CENTER, CENTER);
-    fill(255, 0, 0);
-    textSize(12);
-    text(message, width / 2, 480);
+    if (message !== "") {
+      this.lastErrorMessage = message; 
+      this.lastErrorTime = globalTime;
+    }
+    if (debugging) {console.log(message); console.log(this.lastErrorMessage)};
+    push()
+      textAlign(CENTER);
+      let timeDiff = globalTime - this.lastErrorTime;
+      fill(255, 0, 0, 255-timeDiff/2);
+      text(this.lastErrorMessage, width / 2, 485-(timeDiff/16));
     pop();
   }
 

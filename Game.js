@@ -1,6 +1,5 @@
 // Game.js
-// Coordinates WordBank, InputHandler, Embedder, Scorer and Renderer for a
-// single game session.
+// Coordinates WordBank, InputHandler, Embedder, Scorer and Renderer for a single game session.
 class Game {
   constructor() {
     this.wordBank = new WordBank();
@@ -33,7 +32,6 @@ class Game {
 
   draw() {
     background(240);
-
     if (!this.modelLoaded) {
       this.renderer.drawLoading();
       return;
@@ -44,10 +42,10 @@ class Game {
     if (this.lastResult) {
       this.renderer.drawResult(this.lastResult);
     }
+    this.inputHandler.errorMessage = "";
   }
 
-  // Called when the user presses Enter. Follows the pipeline designed in DE3:
-  // validate -> check duplicate -> embed -> score -> map font size -> display.
+  // Called when the user presses Enter. Follows the pipeline designed in DE3: validate -> check duplicate -> embed -> score -> map font size -> display.
   async submitGuess() {
     if (!this.modelLoaded || this.isProcessingGuess) return;
 
