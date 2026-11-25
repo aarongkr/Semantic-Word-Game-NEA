@@ -1,5 +1,5 @@
 // sketch.js
-let debugging = false;
+let debugging = true;
 let atCollege = false;
 
 let game;
@@ -15,11 +15,13 @@ function draw() {
   globalTime = millis();
   game.draw();
   if (debugging) {
-    text(`${mouseX}, ${mouseY}`, mouseX, mouseY)
+    textSize(10)
+    text(`${round(mouseX)}, ${round(mouseY)}`, mouseX, mouseY)
   }
 }
 
 function keyPressed() {
+  if (game.isGameOver) return
   if (key === ENTER) {
     game.submitGuess(); // async, deliberately not awaited here — draw() keeps running while this resolves
   } else if (key === BACKSPACE) {

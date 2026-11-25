@@ -3,8 +3,7 @@
 class Scorer {
   constructor() {}
 
-  // Calculates cosine similarity between two equal-length vectors, returning
-  // a value between -1 and 1, where 1 indicates identical meaning.
+  // Calculates cosine similarity between two equal-length vectors, returning a value between -1 and 1, where 1 indicates identical meaning.
   cosineSim(vectorA, vectorB) {
     let dotProduct = 0;
     let magnitudeA = 0;
@@ -23,11 +22,18 @@ class Scorer {
   mapFontSize(score) {
     const MIN_SIZE = 12;
     const MAX_SIZE = 72;
+    const MIN_SCORE = 0.15;
+    const MAX_SCORE = 0.85;
 
-    let normalised = (score + 1) / 2;
-    let curved = Math.pow(normalised, 3);
-    let fontSize = MIN_SIZE + curved * (MAX_SIZE - MIN_SIZE);
+    if (score < MIN_SCORE) {
+        return MIN_SIZE;
+    }
+    if (score > MAX_SCORE) {
+        return MAX_SIZE;
+    }
 
-    return Math.round(fontSize);
+    const x = (score - MIN_SCORE) / (MAX_SCORE - MIN_SCORE);
+    const curved = 3 * x ** 2 - 2 * x ** 3;
+    return (MIN_SIZE + curved * (MAX_SIZE - MIN_SIZE));
   }
 }

@@ -10,7 +10,7 @@ class WordBank {
   // loads both word data files asynchronously, must be completed before pickSecret() or isValidWord() are called, as both depend on this data
   async loadWords() {
     this.secretWordList = await loadJSON('data/words.json');
-    this.validWords = await loadJSON('data/validWords.json')
+    this.validWords = await loadJSON('data/validWords.json');
   }
 
   // selects a random theme, then a random word within that theme, to act as the secret word for the current session

@@ -7,14 +7,15 @@ class Game {
     this.inputHandler = new InputHandler();
     this.embedder = new Embedder();
     this.scorer = new Scorer();
+    this.wordCloud = new WordCloud();
 
     this.secretWord = null;
     this.secretVector = null; // cached once in setup(), see DE3 justification
     this.previousGuesses = new Set(); // Set for O(1) duplicate lookup, see DE4
-    this.lastResult = null; // { word, score, fontSize } of the most recent valid guess
 
     this.modelLoaded = false;
     this.isProcessingGuess = false; // prevents overlapping guesses while embed() is awaited
+    this.isGameOver = false;
   }
 
   async setup() {
@@ -31,23 +32,33 @@ class Game {
   }
 
   draw() {
-    background(240);
+    this.renderer.drawBackground();
+    
     if (!this.modelLoaded) {
       this.renderer.drawLoading();
       return;
     }
-    this.inputHandler.updateBackspace();
-    this.renderer.drawInputBox(this.inputHandler.getValue());
-    this.renderer.drawErrorMessage(this.inputHandler.getError());
-    if (this.lastResult) {
-      this.renderer.drawResult(this.lastResult);
+    
+    if (!this.isGameOver) { // input hidden on game win
+      this.inputHandler.updateBackspace();
+      this.wordCloud.update();
+      this.renderer.drawWordCloud(this.wordCloud.getGuesses());
+      this.renderer.drawInputBox(this.inputHandler.getValue());
+      this.renderer.drawErrorMessage(this.inputHandler.getError());
+    } else {
+      this.wordCloud.update(); // the cloud keeps moving on game win
+      this.renderer.drawWordCloud(this.wordCloud.getGuesses());
+      this.renderer.drawWinMessage(this.secretWord, this.wordCloud.getGuesses().length);
     }
+    this.renderer.drawGuessCounter(this.wordCloud.getGuesses().length);
+
     this.inputHandler.errorMessage = "";
   }
 
   // Called when the user presses Enter. Follows the pipeline designed in DE3: validate -> check duplicate -> embed -> score -> map font size -> display.
   async submitGuess() {
-    if (!this.modelLoaded || this.isProcessingGuess) return;
+    let isCorrect;
+    if (!this.modelLoaded || this.isProcessingGuess || this.isGameOver) return;
 
     let guess = this.inputHandler.getValue();
     if (guess === '') return;
@@ -65,16 +76,23 @@ class Game {
     }
 
     this.isProcessingGuess = true;
-    let score = random(0, 1);
+    let score = random(0, 0.5);
     if (!atCollege) {
       let guessVector = await this.embedder.embed(guess);
-      let score = this.scorer.cosineSim(guessVector, this.secretVector);
+      score = this.scorer.cosineSim(guessVector, this.secretVector);
     }
+    if (debugging) {console.log(score)};
     let fontSize = this.scorer.mapFontSize(score);
-
-    this.lastResult = { word: guess, score: score, fontSize: fontSize };
+    if (guess === this.secretWord) {
+      this.isGameOver = true; // win check reuses the already-validated guess, per DE4
+      isCorrect = true;
+    } else {
+      isCorrect = false;
+    }
+    this.wordCloud.addGuess(guess, fontSize, isCorrect);
     this.previousGuesses.add(guess);
     this.inputHandler.clearInput();
+
     this.isProcessingGuess = false;
   }
 }
