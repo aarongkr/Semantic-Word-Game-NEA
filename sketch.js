@@ -1,5 +1,5 @@
 // sketch.js
-let debugging = true;
+let debugging = false;
 let atCollege = false;
 
 let game;
